@@ -18,10 +18,10 @@ function saveAudio() {
     audioRecorder.exportWAV( doneEncoding );
 }
 
-function drawWave( buffer ) {
+function drawWave( buffers ) {
     var canvas = document.getElementById( "wavedisplay" );
 
-    drawBuffer( canvas.width, canvas.height, canvas.getContext('2d'), buffer );
+    drawBuffer( canvas.width, canvas.height, canvas.getContext('2d'), buffers[0] );
 }
 
 function doneEncoding( blob ) {
@@ -34,7 +34,7 @@ function toggleRecording( e ) {
         // stop recording
         audioRecorder.stop();
         e.classList.remove("recording");
-        audioRecorder.getBuffer( drawWave );
+        audioRecorder.getBuffers( drawWave );
     } else {
         // start recording
         if (!audioRecorder)

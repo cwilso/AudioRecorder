@@ -48,9 +48,9 @@
       worker.postMessage({ command: 'clear' });
     }
 
-    this.getBuffer = function(cb) {
+    this.getBuffers = function(cb) {
       currCallback = cb || config.callback;
-      worker.postMessage({ command: 'getBuffer' })
+      worker.postMessage({ command: 'getBuffers' })
     }
 
     this.exportWAV = function(cb, type){
@@ -60,15 +60,6 @@
       worker.postMessage({
         command: 'exportWAV',
         type: type
-      });
-    }
-
-    this.setBuffer = function(cb, buffer){
-      currCallback = cb || config.callback;
-      if (!currCallback) throw new Error('Callback not set');
-      worker.postMessage({
-        command: 'setBuffer',
-        data: buffer
       });
     }
 
