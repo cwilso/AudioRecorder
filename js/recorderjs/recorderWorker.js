@@ -14,6 +14,9 @@ this.onmessage = function(e){
     case 'exportWAV':
       exportWAV(e.data.type);
       break;
+    case 'exportMonoWAV':
+      exportMonoWAV(e.data.type);
+      break;
     case 'getBuffers':
       getBuffers();
       break;
@@ -38,6 +41,14 @@ function exportWAV(type){
   var bufferR = mergeBuffers(recBuffersR, recLength);
   var interleaved = interleave(bufferL, bufferR);
   var dataview = encodeWAV(interleaved);
+  var audioBlob = new Blob([dataview], { type: type });
+
+  this.postMessage(audioBlob);
+}
+
+function exportMonoWAV(type){
+  var bufferL = mergeBuffers(recBuffersL, recLength);
+  var dataview = encodeWAV(bufferL, true);
   var audioBlob = new Blob([dataview], { type: type });
 
   this.postMessage(audioBlob);
@@ -94,7 +105,7 @@ function writeString(view, offset, string){
   }
 }
 
-function encodeWAV(samples){
+function encodeWAV(samples, mono){
   var buffer = new ArrayBuffer(44 + samples.length * 2);
   var view = new DataView(buffer);
 
@@ -111,7 +122,7 @@ function encodeWAV(samples){
   /* sample format (raw) */
   view.setUint16(20, 1, true);
   /* channel count */
-  view.setUint16(22, 2, true);
+  view.setUint16(22, mono?1:2, true);
   /* sample rate */
   view.setUint32(24, sampleRate, true);
   /* byte rate (sample rate * block align) */

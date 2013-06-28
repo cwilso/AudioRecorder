@@ -16,6 +16,8 @@ var recIndex = 0;
 
 function saveAudio() {
     audioRecorder.exportWAV( doneEncoding );
+    // could get mono instead by saying
+    // audioRecorder.exportMonoWAV( doneEncoding );
 }
 
 function drawWave( buffers ) {
