@@ -1,4 +1,4 @@
-var audioContext = new webkitAudioContext();
+var audioContext = new AudioContext();
 var audioInput = null,
     realAudioInput = null,
     inputPoint = null,
@@ -115,7 +115,7 @@ function toggleMono() {
 }
 
 function gotStream(stream) {
-    inputPoint = audioContext.createGainNode();
+    inputPoint = audioContext.createGain();
 
     // Create an AudioNode from the stream.
     realAudioInput = audioContext.createMediaStreamSource(stream);
@@ -130,7 +130,7 @@ function gotStream(stream) {
 
     audioRecorder = new Recorder( inputPoint );
 
-    zeroGain = audioContext.createGainNode();
+    zeroGain = audioContext.createGain();
     zeroGain.gain.value = 0.0;
     inputPoint.connect( zeroGain );
     zeroGain.connect( audioContext.destination );
@@ -138,10 +138,10 @@ function gotStream(stream) {
 }
 
 function initAudio() {
-    if (!navigator.webkitGetUserMedia)
-        return(alert("Error: getUserMedia not supported!"));
+        if (!navigator.getUserMedia)
+            navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-    navigator.webkitGetUserMedia({audio:true}, gotStream, function(e) {
+    navigator.getUserMedia({audio:true}, gotStream, function(e) {
             alert('Error getting audio');
             console.log(e);
         });
