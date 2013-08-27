@@ -73,7 +73,7 @@ function convertToMono( input ) {
 }
 
 function cancelAnalyserUpdates() {
-    window.webkitCancelAnimationFrame( rafID );
+    window.cancelAnimationFrame( rafID );
     rafID = null;
 }
 
@@ -113,7 +113,7 @@ function updateAnalysers(time) {
         }
     }
     
-    rafID = window.webkitRequestAnimationFrame( updateAnalysers );
+    rafID = window.requestAnimationFrame( updateAnalysers );
 }
 
 function toggleMono() {
@@ -155,6 +155,10 @@ function gotStream(stream) {
 function initAudio() {
         if (!navigator.getUserMedia)
             navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+        if (!navigator.cancelAnimationFrame)
+            navigator.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
+        if (!navigator.requestAnimationFrame)
+            navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
 
     navigator.getUserMedia({audio:true}, gotStream, function(e) {
             alert('Error getting audio');
