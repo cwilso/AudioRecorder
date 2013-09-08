@@ -25,7 +25,7 @@ DEALINGS IN THE SOFTWARE.
     var config = cfg || {};
     var bufferLen = config.bufferLen || 4096;
     this.context = source.context;
-    if(this.context.createJavaScriptNode){
+    if(!this.context.createScriptProcessor){
        this.node = this.context.createJavaScriptNode(bufferLen, 2, 2);
     } else {
        this.node = this.context.createScriptProcessor(bufferLen, 2, 2);
