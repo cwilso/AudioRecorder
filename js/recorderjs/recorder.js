@@ -103,7 +103,7 @@ DEALINGS IN THE SOFTWARE.
     }
 
     source.connect(this.node);
-    this.node.connect(this.context.destination);    //this should not be necessary
+    this.node.connect(this.context.destination);   // if the script node is not connected to an output the "onaudioprocess" event is not triggered in chrome.
   };
 
   Recorder.forceDownload = function(blob, filename){
