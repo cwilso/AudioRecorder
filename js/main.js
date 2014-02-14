@@ -35,14 +35,18 @@ function saveAudio() {
     // audioRecorder.exportMonoWAV( doneEncoding );
 }
 
-function drawWave( buffers ) {
+function gotBuffers( buffers ) {
     var canvas = document.getElementById( "wavedisplay" );
 
     drawBuffer( canvas.width, canvas.height, canvas.getContext('2d'), buffers[0] );
+
+    // the ONLY time gotBuffers is called is right after a new recording is completed - 
+    // so here's where we should set up the download.
+    audioRecorder.exportWAV( doneEncoding );
 }
 
 function doneEncoding( blob ) {
-    Recorder.forceDownload( blob, "myRecording" + ((recIndex<10)?"0":"") + recIndex + ".wav" );
+    Recorder.setupDownload( blob, "myRecording" + ((recIndex<10)?"0":"") + recIndex + ".wav" );
     recIndex++;
 }
 
@@ -51,7 +55,7 @@ function toggleRecording( e ) {
         // stop recording
         audioRecorder.stop();
         e.classList.remove("recording");
-        audioRecorder.getBuffers( drawWave );
+        audioRecorder.getBuffers( gotBuffers );
     } else {
         // start recording
         if (!audioRecorder)

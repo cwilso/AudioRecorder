@@ -106,14 +106,11 @@ DEALINGS IN THE SOFTWARE.
     this.node.connect(this.context.destination);   // if the script node is not connected to an output the "onaudioprocess" event is not triggered in chrome.
   };
 
-  Recorder.forceDownload = function(blob, filename){
+  Recorder.setupDownload = function(blob, filename){
     var url = (window.URL || window.webkitURL).createObjectURL(blob);
-    var link = window.document.createElement('a');
+    var link = document.getElementById("save");
     link.href = url;
     link.download = filename || 'output.wav';
-    var click = document.createEvent("Event");
-    click.initEvent("click", true, true);
-    link.dispatchEvent(click);
   }
 
   window.Recorder = Recorder;
