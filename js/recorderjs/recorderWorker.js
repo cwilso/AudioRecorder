@@ -17,6 +17,8 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 DEALINGS IN THE SOFTWARE.
 */
 
+importScripts("Mp3LameEncoder.min.js");
+
 var recLength = 0,
   recBuffersL = [],
   recBuffersR = [],
@@ -32,6 +34,9 @@ this.onmessage = function(e){
       break;
     case 'exportWAV':
       exportWAV(e.data.type);
+      break;
+    case 'exportMP3':
+      exportMP3(e.data.type);
       break;
     case 'exportMonoWAV':
       exportMonoWAV(e.data.type);
@@ -60,6 +65,16 @@ function exportWAV(type){
   var bufferR = mergeBuffers(recBuffersR, recLength);
   var interleaved = interleave(bufferL, bufferR);
   var dataview = encodeWAV(interleaved);
+  var audioBlob = new Blob([dataview], { type: type });
+
+  this.postMessage(audioBlob);
+}
+
+function exportMP3(type){
+  var bufferL = mergeBuffers(recBuffersL, recLength);
+  var bufferR = mergeBuffers(recBuffersR, recLength);
+
+  var dataview = encodeMP3(bufferL, bufferR);
   var audioBlob = new Blob([dataview], { type: type });
 
   this.postMessage(audioBlob);
@@ -158,4 +173,16 @@ function encodeWAV(samples, mono){
   floatTo16BitPCM(view, 44, samples);
 
   return view;
+}
+
+function encodeMP3(left, right){
+  var buffer = new ArrayBuffer(left.length * 2);
+  var view = new DataView(buffer);
+
+  encoder = new Mp3LameEncoder(sampleRate, 160);
+  encoder.encode([left, right]);
+
+  blob = encoder.finish("audio/mpeg");
+
+  return blob;
 }

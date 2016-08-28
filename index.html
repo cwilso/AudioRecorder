@@ -65,6 +65,10 @@
 		<canvas id="wavedisplay" width="1024" height="500"></canvas>
 	</div>
 	<div id="controls">
+		<select id="encodingSelect" onchange="encoding = this.value;">
+			<option value="mp3" selected>MP3</option>
+			<option value="wav">WAV</option>
+		</select>
 		<img id="record" src="img/mic128.png" onclick="toggleRecording(this);">
 		<a id="save" href="#"><img src="img/save.svg"></a>
 	</div>
