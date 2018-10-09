@@ -87,6 +87,16 @@ DEALINGS IN THE SOFTWARE.
       });
     }
 
+    this.exportMP3 = function(cb, type) {
+      currCallback = cb || config.callback;
+      type = type || config.type || 'audio/mpeg';
+      if (!currCallback) throw new Error('Callback not set');
+      worker.postMessage({
+        command: 'exportMP3',
+        type: type
+      });
+    }
+
     this.exportMonoWAV = function(cb, type){
       currCallback = cb || config.callback;
       type = type || config.type || 'audio/wav';
