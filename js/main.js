@@ -15,7 +15,7 @@
 
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
-var audioContext = new AudioContext();
+var audioContext = null;
 var audioInput = null,
     realAudioInput = null,
     inputPoint = null,
@@ -62,6 +62,7 @@ function toggleRecording( e ) {
         // start recording
         if (!audioRecorder)
             return;
+        // $(window).ready(initAudio);
         e.classList.add("recording");
         audioRecorder.clear();
         audioRecorder.record();
@@ -136,6 +137,9 @@ function toggleMono() {
 }
 
 function gotStream(stream) {
+
+    audioContext = new AudioContext();
+
     inputPoint = audioContext.createGain();
 
     // Create an AudioNode from the stream.
@@ -159,12 +163,12 @@ function gotStream(stream) {
 }
 
 function initAudio() {
-        if (!navigator.getUserMedia)
-            navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-        if (!navigator.cancelAnimationFrame)
-            navigator.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
-        if (!navigator.requestAnimationFrame)
-            navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
+    if (!navigator.getUserMedia)
+        navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+    if (!navigator.cancelAnimationFrame)
+        navigator.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
+    if (!navigator.requestAnimationFrame)
+        navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
 
     navigator.getUserMedia(
         {
