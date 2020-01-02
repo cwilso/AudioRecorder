@@ -53,6 +53,13 @@ function doneEncoding( blob ) {
 }
 
 function toggleRecording( e ) {
+    // Changes as per the google autoplay-policy-changes
+    // ref: https://developers.google.com/web/updates/2017/09/autoplay-policy-changes#webaudio
+    if(audioContext.state !== "running"){
+        audioContext.resume().then(() => {
+            console.log('Playback resumed successfully');
+        });
+    }
     if (e.classList.contains("recording")) {
         // stop recording
         audioRecorder.stop();
