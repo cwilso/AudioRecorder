@@ -15,7 +15,6 @@
 
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
-var audioContext = new AudioContext();
 var audioInput = null,
     realAudioInput = null,
     inputPoint = null,
@@ -136,6 +135,8 @@ function toggleMono() {
 }
 
 function gotStream(stream) {
+    window.audioContext = new AudioContext();
+
     inputPoint = audioContext.createGain();
 
     // Create an AudioNode from the stream.
